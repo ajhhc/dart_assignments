@@ -1,4 +1,7 @@
+This repository holds a collection of Dart scripts from a self-taught Dart course, based on an online guide. I worked through the material independently, focusing on core concepts like control structures, functions, classes, and file I/O. The scripts are grouped into folders by assignment sets (e.g., assignments_01, assignments_02), with each including a menu launcher (main.dart) for selecting and running exercises.The order reflects my actual progression—mostly sequential, but with some backtracking for revisions or skipped topics. It's not polished perfection, just a practical archive to impose a bit of structure on the process.
+
 Contents:
+
 assignments_01: Fundamentals such as basic checks, loops, and basic calculators.
 assignments_02: Assertions, for-loops, conditionals, and utilities like repeated prints or number filters.
 assignments_03 and beyond: File handling (e.g., user persistence in CSV/TXT), classes (e.g., Rectangle with input validation), and similar exercises.
