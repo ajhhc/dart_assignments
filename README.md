@@ -20,4 +20,6 @@ Purpose:
 
 These were built to follow the course guide, with tweaks for functionality along the way. The repo's mainly for my own reference—keeping the chaos contained in one place, rather than scattered across notebooks.
 
-LicenseMIT License. Use or adapt as you see fit.
+License:
+
+MIT License. Use or adapt as you see fit.
