@@ -1,0 +1,8 @@
+# Dart/Flutter noise
+.dart_tool/
+.flutter-plugins
+pubspec.lock
+*.log
+# IDE fluff
+.vscode/
+.idea/
