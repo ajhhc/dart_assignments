@@ -1,4 +1,4 @@
-This repository holds a collection of Dart scripts from a self-taught Dart course, based on an online guide. I worked through the material independently, focusing on core concepts like control structures, functions, classes, and file I/O. The scripts are grouped into folders by assignment sets (e.g., assignments_01, assignments_02), with each including a menu launcher (main.dart) for selecting and running exercises.The order reflects my actual progression—mostly sequential, but with some backtracking for revisions or skipped topics. It's not polished perfection, just a practical archive to impose a bit of structure on the process.
+This repository holds a collection of Dart scripts from a self-taught Dart course, based on an online guide. I worked through the material independently, focusing on core concepts like control structures, functions, classes, and file I/O. The scripts are grouped into folders by assignment sets (e.g., assignments_01, assignments_02), with each including a menu launcher (main.dart) for selecting and running exercises.The order reflects my actual progression. Mostly sequential, but with some backtracking for revisions or skipped topics. It's not polished perfection, just a practical archive to impose a bit of structure on the process.
 
 Contents:
 
@@ -18,7 +18,7 @@ Needs Dart SDK 3.0+. Get it from dart.dev.
 
 Purpose:
 
-These were built to follow the course guide, with tweaks for functionality along the way. The repo's mainly for my own reference—keeping the chaos contained in one place, rather than scattered across notebooks.
+These were built to follow the course guide, with tweaks for functionality along the way. The repo's mainly for my own reference. Keeping the chaos contained in one place, rather than scattered across notebooks.
 
 License:
 
