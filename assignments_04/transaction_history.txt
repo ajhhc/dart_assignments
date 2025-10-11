@@ -1,0 +1,4 @@
+2025-10-11 10:25:21.740712: Account created with initial balance: $1.00.
+2025-10-11 10:25:57.157163: Deposited $52398.00. New Balance: $52399.00.
+2025-10-11 10:26:04.577701: Withdrew $10000.00. New Balance: $42399.00.
+

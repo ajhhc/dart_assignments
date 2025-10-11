@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 
 // Create a temporary list of users
 
@@ -347,4 +348,218 @@ void rectangleClass() {
   if (rectangle1.length == rectangle1.width) {
     print('Your rectangle is a square!');
   }
+}
+
+//create and calculate area of rectangle with constructor
+
+class RectangleWithConstructor {
+  double length;
+  double width;
+
+  RectangleWithConstructor(this.length, this.width) {
+    print("Constructor called with length=$length and width=$width");
+  }
+  double area() {
+    return length * width;
+  }
+
+  double perimeter() {
+    return 2 * (length + width);
+  }
+
+  double diagonal() {
+    return sqrt(length * length + width * width);
+  }
+}
+
+double getUserInput(String prompt, String value) {
+  while (true) {
+    print(prompt);
+    try {
+      double input = double.parse(stdin.readLineSync()!);
+      if (input <= 0) {
+        print('$value should be positive. Try again.');
+        continue;
+      }
+      return input;
+    } catch (e) {
+      print('$value should be a number. Try again.');
+    }
+  }
+}
+
+void rectangleAreaWithConstructor() {
+  // Originally the main() function
+  print('Rectangle area, perimeter and main diagonal calculation:');
+  double len = getUserInput('Enter length: ', 'Length');
+  double wid = getUserInput('Enter width: ', 'Width');
+  RectangleWithConstructor rect = RectangleWithConstructor(len, wid);
+  print('Area: ${rect.area()}');
+  print('Perimeter: ${rect.perimeter()}');
+  print('Diagonal: ${rect.diagonal()}');
+  if (len == wid) {
+    print('Your rectangle is a square!');
+  }
+}
+
+// List of named constructors
+
+class Person {
+  String? name;
+  int? age;
+
+  Person(this.name, this.age);
+
+  Person.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    age = json['age'];
+    print('Constructor 1 called with name=$name and age=$age');
+  }
+
+  Person.fromJsonString(String jsonString) {
+    Map<String, dynamic> json = jsonDecode(jsonString);
+    name = json['name'];
+    age = json['age'];
+    print('Constructor 2 called with name=$name and age=$age');
+  }
+}
+
+void namedConstructors() {
+  // Originally the main() function
+  String jsonString1 = '{"name": "Alice", "age": 30}';
+  Map<String, dynamic> jsonString2 = {"name": "Bob", "age": 25};
+
+  Person p1 = Person.fromJsonString(jsonString1);
+  print('Person 1 Name: ${p1.name}');
+  print('Person 1 Age: ${p1.age}');
+
+  Person p2 = Person.fromJson(jsonString2);
+  print('Person 2 Name: ${p2.name}');
+  print('Person 2 Age: ${p2.age}');
+}
+
+// Simple bank account management system with export of transaction history to a file
+
+void bankAccount() async {
+  // This would be the main() function in a real app
+  double? initialBalance;
+  print('Account Management');
+
+  while (true) {
+    stdout.write('Enter initial balance: \$');
+    initialBalance = double.tryParse(stdin.readLineSync() ?? '0') ?? 0.0;
+    if (initialBalance < 0) {
+      print('Please enter a valid amount.');
+    } else {
+      break;
+    }
+  }
+
+  var account = Account(initialBalance);
+
+  while (true) {
+    print('\nCurrent Balance: \$${account.balance.toStringAsFixed(2)}.');
+    print(
+      '\nChoose an option: (d)eposit, (w)ithdraw, transaction (h)istory, (q)uit',
+    );
+    stdout.write('Your choice: ');
+    String? choice = stdin.readLineSync()?.toLowerCase();
+
+    if (choice == 'q') break;
+    if (choice == 'h') {
+      print('Transaction History:');
+      if (account.history.length <= 1) {
+        // Only in case of no recorded transactions
+        print('No transactions yet.');
+      } else {
+        account.history.forEach(print); // Will print creation too, that's fine
+      }
+      continue;
+    }
+
+    if (choice == 'd' || choice == 'w') {
+      stdout.write('Enter amount: \$');
+      double? amount = double.tryParse(stdin.readLineSync() ?? '0') ?? 0.0;
+      if (amount <= 0) {
+        print('Invalid amount.');
+        continue;
+      }
+      if (choice == 'd') {
+        account.deposit(amount);
+      } else if (choice == 'w') {
+        account.withdraw(amount);
+      }
+    } else {
+      print('Please select a valid choice.');
+    }
+  }
+  print('Saving transaction history...');
+  await saveHistory(account.history, 'transaction_history.txt');
+  print('Exiting. Thank you!');
+}
+
+class Account {
+  // This class would be in a separate file in a real app, should work fine with imports
+  double _balance;
+  final List<String> _history = [];
+
+  Account(this._balance) {
+    if (_balance < 0) {
+      throw ArgumentError('Initial balance cannot be negative.');
+    }
+    print(
+      'Account created with initial balance: \$${balance.toStringAsFixed(2)}.',
+    );
+    _history.add(
+      '${DateTime.now()}: Account created with initial balance: \$${balance.toStringAsFixed(2)}.',
+    );
+  }
+
+  double get balance => _balance;
+
+  void deposit(double amount) {
+    if (amount <= 0) {
+      print('Deposit amount must be positive.');
+      return;
+    }
+    _balance += amount;
+    print(
+      'Deposited: \$$amount, New Balance: \$${balance.toStringAsFixed(2)}.',
+    );
+    _history.add(
+      '${DateTime.now()}: Deposited \$${amount.toStringAsFixed(2)}. New Balance: \$${balance.toStringAsFixed(2)}.',
+    );
+  }
+
+  void withdraw(double amount) {
+    if (amount <= 0) {
+      print('Withdrawal amount must be positive.');
+      return;
+    }
+    if (amount > _balance) {
+      print(
+        'Insufficient funds. Current Balance: \$${_balance.toStringAsFixed(2)}.',
+      );
+      return;
+    }
+    _balance -= amount;
+    print(
+      'Withdrew: \$$amount, New Balance: \$${_balance.toStringAsFixed(2)}.',
+    );
+    _history.add(
+      '${DateTime.now()}: Withdrew \$${amount.toStringAsFixed(2)}. New Balance: \$${balance.toStringAsFixed(2)}.',
+    );
+  }
+
+  List<String> get history => List.unmodifiable(_history);
+}
+
+Future<void> saveHistory(List<String> history, String filename) async {
+  final File file = File(filename);
+  await file.writeAsString(
+    '${history.join('\n')}\n\n',
+    mode: FileMode.append,
+    encoding: utf8,
+  );
+  print('History saved to $filename');
 }

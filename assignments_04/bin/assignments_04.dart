@@ -1,37 +1,45 @@
-import 'package:assignments_04/assignments_04.dart' as assignments_04;
+import 'package:assignments_04/assignments_04.dart';
 import 'dart:io';
 
 void main(List<String> arguments) {
   int? assNumb;
-  while (assNumb != 6) {
-    print('List of assignments 03:');
+  while (assNumb != 8) {
+    print('List of assignments 04:');
     print('''Enter number of assignment to test it:
   1 - Create a temporary list of users
   2 - Find the area of a rectangle
   3 - Create a file
   4 - Create a list of users and save it to a file
   5 - Find the area of a rectangle using class
-  6 - EXIT''');
+  6 - Calculate area, perimeter and diagonal of rectangle using class with constructor
+  7 - Simple bank account log with class and export to file
+  8 - EXIT''');
     try {
       assNumb = int.parse(stdin.readLineSync()!);
 
       switch (assNumb) {
         case 1:
-          assignments_04.listOfUsers();
+          listOfUsers();
           break;
         case 2:
-          assignments_04.rectangleArea();
+          rectangleArea();
           break;
         case 3:
-          assignments_04.fileCreator();
+          fileCreator();
           break;
         case 4:
-          assignments_04.listOfUsersWithFile();
+          listOfUsersWithFile();
           break;
         case 5:
-          assignments_04.rectangleClass();
+          rectangleClass();
           break;
         case 6:
+          rectangleAreaWithConstructor();
+          break;
+        case 7:
+          bankAccount();
+          break;
+        case 8:
           print('Thanks for trying!');
           break;
         default:
