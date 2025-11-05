@@ -441,7 +441,7 @@ void namedConstructors() {
 // Simple bank account management system with export of transaction history to a file
 
 void bankAccount() async {
-  // This would be the main() function in a real app
+  // This would be the main() function in \lib
   double? initialBalance;
   print('Account Management');
 
@@ -562,4 +562,315 @@ Future<void> saveHistory(List<String> history, String filename) async {
     encoding: utf8,
   );
   print('History saved to $filename');
+}
+
+// Just a small refresher of user input handling, coupled with reusable blocks and testing stdout
+
+void madLibsGame() {
+  print('Mad libs game:');
+  stdout.write('Give me a colour: ');
+  String? colour = input();
+  stdout.write('Give me a plural noun: ');
+  String? pluralNoun = input();
+  stdout.write('Give me a celebrity: ');
+  String? celebrity = input();
+
+  print('$colour, $pluralNoun, $celebrity');
+}
+
+String input() {
+  String? prompt;
+  while (prompt == null || prompt == '') {
+    try {
+      prompt = stdin.readLineSync();
+    } on Exception catch (e) {
+      print('Error: $e\nPlease try again.');
+    }
+  }
+  return prompt;
+}
+
+// Find some tendency numbers in a group (without class)
+
+void tendency() {
+  // main function
+  List<num> allNumbers = [];
+  List<num> allNumbersSorted = [];
+  print('Calculate mean, median and mode of a list of numbers');
+  while (true) {
+    stdout.write('Enter a number or Q to quit: ');
+    String input = stdin.readLineSync() ?? '';
+    input = input.toLowerCase();
+    if (input == 'q') {
+      allNumbersSorted.sort();
+      if (allNumbers.isNotEmpty) {
+        print('List:        $allNumbers');
+        print('Sorted list: $allNumbersSorted');
+        print('Mean: ${(calcMean(allNumbers)).toStringAsFixed(2)}');
+        print('Median: ${calcMedian(allNumbersSorted)}');
+        List<num> mode = calcMode(allNumbers);
+        printMode(mode);
+      } else {
+        print('No numbers added.');
+      }
+      print('Goodbye!');
+      break;
+    } else {
+      try {
+        num number = num.tryParse(input)!;
+        allNumbers.add(number);
+        allNumbersSorted.add(number);
+      } catch (e) {
+        print('Please enter a valid number.');
+      }
+    }
+  }
+}
+
+// All functions to go in /lib/
+
+num calcMean(List<num> theList) {
+  if (theList.isEmpty) return 0.0;
+
+  num totalSum = 0;
+  for (var numb in theList) {
+    totalSum += numb;
+  }
+  return totalSum / theList.length;
+}
+
+num calcMedian(List<num> numbers) {
+  if (numbers.isEmpty) return 0.0;
+
+  if (numbers.length % 2 == 0) {
+    int num1 = ((numbers.length - 1) ~/ 2);
+    int num2 = ((numbers.length + 1) ~/ 2);
+    return (numbers[num1] + numbers[num2]) / 2;
+  } else {
+    int index = (numbers.length ~/ 2);
+    return numbers[index];
+  }
+}
+
+List<num> calcMode(List<num> numb) {
+  if (numb.isEmpty) return [];
+
+  Map<num, int> freq = {};
+  for (num number in numb) {
+    freq[number] = (freq[number] ?? 0) + 1;
+  }
+
+  int maxCount = 0;
+  List<num> modes = [];
+  for (var entry in freq.entries) {
+    if (entry.value > maxCount) {
+      maxCount = entry.value;
+      modes = [entry.key];
+    } else if (entry.value == maxCount) {
+      modes.add(entry.key);
+    }
+  }
+
+  if (maxCount <= 1) return [];
+
+  return modes;
+}
+
+void printMode(List<num> modes) {
+  if (modes.isEmpty) {
+    print('Mode: there is no mode.');
+    return;
+  }
+
+  if (modes.length == 1) {
+    print('Mode: ${modes[0]}');
+    return;
+  }
+  print('Modes: ${modes.join(', ')}');
+}
+
+// Refactor tendency calculator to use class and reusable methods with a side order of factory constructors
+// Gonna start adding comments from now on, maybe I will go back to the old scripts and do the same
+
+void tendencyWithClass() {
+  // Main function, takes a string input and passes it to a switch
+  // Everything encapsulated in a do-while loop
+  String option = '';
+  do {
+    print('Calculate the mean, median and mode of a list of numbers.');
+    print('Select an option: ');
+    print('''1 - Add new number
+2 - Show mean
+3 - Show median
+4 - Show mode
+5 - Show all stats
+0 - Quit''');
+
+    option = stdin.readLineSync() ?? '';
+    switch (option) {
+      case '1':
+        mainInput(); // Extracting methods feels like a good practice, plus it reads easier
+      case '2':
+        summary(
+          Flags.mean().flags,
+        ); // As weird as it looks, it was the only way I found to avoid repeating the stats prints for case 5
+        // I hope there are better tools for this type of branching options further down the toolbox
+        break;
+      case '3':
+        summary(Flags.median().flags);
+        break;
+      case '4':
+        summary(Flags.mode().flags);
+        break;
+      case '5':
+        summary(Flags.all().flags);
+        break;
+      case '0': // This could have been 'Q' too, but I realized only after I used it in mainInput
+        print('Bye bye!');
+        break;
+      default:
+        print('Please select a valid option.');
+    }
+  } while (option != '0');
+}
+
+void mainInput() {
+  // The block got a little too long, but it looks fine here
+  String? input = '';
+  while (input != 'q') {
+    try {
+      stdout.write('Enter a number or press (Q) to go back: ');
+      input = stdin.readLineSync()!.toLowerCase();
+      if (input == 'q') break;
+      num? inputNum = num.tryParse(input);
+      if (inputNum == null) {
+        print('Please enter a valid number.');
+        continue;
+      }
+      Stats.addToList(inputNum);
+      print('$input successfully added to the list!');
+    } catch (e) {
+      print('Please enter a valid number.');
+    }
+  }
+}
+
+void summary(Map<String, bool> flags) {
+  if (Stats.numbers.isEmpty) {
+    print('Nothing to show yet...');
+    return;
+  }
+  if (flags.values.every((v) => v)) {
+    // I'm still not too sure how the lambda syntax works, but it works
+    print('There are ${Stats.numbers.length} numbers in the list.');
+    print('Original list: ${Stats.numbers.join(', ')}');
+    print('Sorted list:   ${Stats.numbersSorted.join(', ')}');
+  }
+
+  flags.forEach((key, active) {
+    // Looks long, but it was way longer before refactoring IMO
+    if (active) {
+      switch (key) {
+        case 'mean':
+          print('Mean: ${Stats.calcMean().toStringAsFixed(2)}');
+          break;
+        case 'median':
+          print('Median: ${Stats.calcMedian().toStringAsFixed(2)}');
+          break;
+        case 'mode':
+          List<num> modes = Stats.calcMode();
+          if (modes.isEmpty) {
+            print('Mode(s): none');
+          } else if (modes.length == 1) {
+            print('Mode: ${modes[0]}');
+          } else {
+            print('Modes: ${modes.join(', ')}');
+          }
+          break;
+      }
+    }
+  });
+}
+
+class Stats {
+  // A static class, if such a thing even exists
+  static final List<num> _numbers = [];
+  static final List<num> _numbersSorted = [];
+
+  Stats._(); // Throwing away the key
+
+  static List get numbers => _numbers;
+  static List get numbersSorted => _numbersSorted;
+
+  static void addToList(num newEntry) {
+    _numbers.add(newEntry);
+    _numbersSorted.add(newEntry);
+    //    _numbersSorted.sort(); // Not sure if it's the most efficient way
+    // but I need the sorted list ready at all times
+  }
+
+  static num calcMean() {
+    num totalCount = 0;
+    for (var number in _numbers) {
+      totalCount += number;
+    }
+    return (totalCount / _numbers.length);
+  }
+
+  static num calcMedian() {
+    if (_numbersSorted.isEmpty) return 0.0;
+    if (_numbersSorted.length == 1) return _numbersSorted[0];
+
+    _numbersSorted.sort();
+    if (_numbersSorted.length % 2 == 0) {
+      int num1 = ((_numbersSorted.length - 1) ~/ 2);
+      int num2 = ((_numbersSorted.length + 1) ~/ 2);
+      return (_numbersSorted[num1] + _numbersSorted[num2]) / 2;
+    } else {
+      int index = (_numbersSorted.length ~/ 2);
+      return _numbersSorted[index];
+    }
+  }
+
+  static List<num> calcMode() {
+    Map<num, int> freq = {};
+    for (num numb in _numbers) {
+      freq[numb] = (freq[numb] ?? 0) + 1;
+    }
+
+    int maxFreq = 0;
+    List<num> modes = [];
+    for (var entry in freq.entries) {
+      if (entry.value > maxFreq) {
+        maxFreq = entry.value;
+        modes = [entry.key];
+      } else if (entry.value == maxFreq) {
+        modes.add(entry.key);
+      }
+    }
+
+    if (maxFreq <= 1) return [];
+
+    return modes;
+  }
+}
+
+class Flags {
+  // It's difficult to judge whether to bite the  DRY bullet or not
+  // But I need to practice with factory constructors anyway, so why not
+  // Plus, I'm sure the trade-off will be more beneficial in larger projects
+  final Map<String, bool> flags;
+
+  Flags._(this.flags);
+
+  factory Flags.mean() =>
+      Flags._({'mean': true, 'median': false, 'mode': false});
+
+  factory Flags.median() =>
+      Flags._({'mean': false, 'median': true, 'mode': false});
+
+  factory Flags.mode() =>
+      Flags._({'mean': false, 'median': false, 'mode': true});
+
+  factory Flags.all() => Flags._({'mean': true, 'median': true, 'mode': true});
 }

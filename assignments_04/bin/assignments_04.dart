@@ -13,7 +13,10 @@ void main(List<String> arguments) {
   5 - Find the area of a rectangle using class
   6 - Calculate area, perimeter and diagonal of rectangle using class with constructor
   7 - Simple bank account log with class and export to file
-  8 - EXIT''');
+  8 - Mad Libs Game
+  9 - Tendency values of a list of numbers
+  10 - Tendency values (with class)
+  0 - EXIT''');
     try {
       assNumb = int.parse(stdin.readLineSync()!);
 
@@ -40,6 +43,15 @@ void main(List<String> arguments) {
           bankAccount();
           break;
         case 8:
+          madLibsGame();
+          break;
+        case 9:
+          tendency();
+          break;
+        case 10:
+          tendencyWithClass();
+          break;
+        case 0:
           print('Thanks for trying!');
           break;
         default:
