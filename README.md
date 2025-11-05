@@ -18,7 +18,7 @@ Needs Dart SDK 3.0+. Get it from dart.dev.
 
 Purpose:
 
-These were built to follow the course guide, with tweaks for functionality along the way. The repo's mainly for my own reference—keeping the chaos contained in one place, rather than scattered across notebooks.
+These were built to follow the course guide, with tweaks for functionality along the way. The repo's mainly for my own reference. Keeping the chaos contained in one place, rather than scattered across notebooks.
 
 License:
 
